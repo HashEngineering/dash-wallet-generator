@@ -11,7 +11,7 @@ program
     .parse(process.argv);
 
 if (program.create) {
-    console.log(' int: %j', program.create);
+    console.log(' creating %j paper wallets', program.create);
 
     // TODO: validate that int is passed as argument
 
@@ -20,6 +20,12 @@ if (program.create) {
     })
 }
 
-if (program.list) console.log(' list');
+if (program.list) {
+    console.log(' listing all wallets');
+
+    wallet.listWallets({funded: false}, function() {
+        console.log("...done!");
+    })
+}
 
 
