@@ -30,7 +30,7 @@ if (program.create) {
 if (program.list) {
     console.log(' listing all wallets');
 
-    wallet.listWallets({funded: false}, function(err, res) {
+    wallet.listWallets({filtered: false}, function(err, res) {
         var wallets = res;
 
         console.log(wallets);
@@ -44,7 +44,7 @@ if (program.fund) {
     // TODO - validate amount provided by user
     var amount = program.fund;
 
-    wallet.listWallets({funded: false}, function(err, res) {
+    wallet.listWallets({filtered: true}, function(err, res) {
         var wallets = res;
 
         if (wallets.length > 0) {
