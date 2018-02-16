@@ -2,6 +2,7 @@
 
 var wallet = require('./lib/wallet.js');
 var transaction = require('./lib/transaction.js');
+var database = require('./lib/database.js');
 
 var program = require('commander');
 
@@ -14,18 +15,25 @@ program
 
 if (program.create) {
     console.log(' creating %j paper wallets', program.create);
-
     // TODO: validate that int is passed as argument
 
-    wallet.createWallets(program.create, function() {
-        console.log("...done!");
+    wallet.createWallets(program.create, function(err, res) {
+        var wallets = res;
+
+        database.add(wallets, function(err, res) {
+            console.log(res);
+            console.log("...done!");
+        });
     })
 }
 
 if (program.list) {
     console.log(' listing all wallets');
 
-    wallet.listWallets({funded: false}, function() {
+    wallet.listWallets({funded: false}, function(err, res) {
+        var wallets = res;
+
+        console.log(wallets);
         console.log("...done!");
     })
 }
@@ -37,23 +45,29 @@ if (program.fund) {
     var amount = program.fund;
 
     wallet.listWallets({funded: false}, function(err, res) {
-
         var wallets = res;
 
-        transaction.createFundingTx(amount, wallets, function(err, res) {
+        if (wallets.length > 0) {
 
-            console.log(res.transaction.toString());
+            transaction.createFundingTx(amount, wallets, function(err, res) {
+                var tx = res.transaction;
+                var addresses = res.addresses;
 
-            // Broadcast Funding TX
-            /*
-            transaction.broadcastTx({rawtx: res.transaction.toString()}, function(err, res) {
-                console.log(res);
+                // Broadcast Funding TX
+                transaction.broadcastTx({rawtx: tx.toString()}, function(err, res) {
+                    console.log(res);
+                });
+
+                // update wallet addresses w/ txid and amount
+                for (var i = 0; i < addresses.length; i++) {
+                    database.edit({address: addresses[i]}, {txid: tx.id, amount: amount}, function(err, res) {
+                        console.log(res);
+                    });
+                }
+
             });
-            */
 
-            // TODO - update wallet CSV db
-
-        });
+        }
 
     })
 }
