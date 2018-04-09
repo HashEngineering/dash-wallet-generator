@@ -2,6 +2,7 @@
 
 var wallet = require('./lib/wallet.js');
 var transaction = require('./lib/transaction.js');
+var blockExplorer = require('./lib/blockExplorer.js');
 var database = require('./lib/database.js');
 
 var program = require('commander');
@@ -20,7 +21,7 @@ if (program.create) {
     wallet.createWallets(program.create, function(err, res) {
         var wallets = res;
 
-        database.add(wallets, function(err, res) {
+        database.add('wallets', wallets, function(err, res) {
             console.log(res);
             console.log("...done!");
         });
@@ -54,13 +55,13 @@ if (program.fund) {
                 var addresses = res.addresses;
 
                 // Broadcast Funding TX
-                transaction.broadcastTx({rawtx: tx.toString()}, function(err, res) {
+                blockExplorer.broadcastTx({rawtx: tx.toString()}, function(err, res) {
                     console.log(res);
                 });
 
                 // update wallet addresses w/ txid and amount
                 for (var i = 0; i < addresses.length; i++) {
-                    database.edit({address: addresses[i]}, {txid: tx.id, amount: amount}, function(err, res) {
+                    database.edit('wallets', {address: addresses[i]}, {txid: tx.id, amount: amount}, function(err, res) {
                         console.log(res);
                     });
                 }
