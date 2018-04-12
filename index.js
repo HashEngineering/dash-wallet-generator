@@ -48,7 +48,7 @@ if (program.fund) {
     // TODO - validate amount provided by user
     var amount = program.fund;
 
-    wallet.listWallets({filtered: true}, function(err, res) {
+    wallet.listWallets('wallets', {filtered: true}, function(err, res) {
         var wallets = res;
 
         if (wallets.length > 0) {
@@ -79,13 +79,30 @@ if (program.fund) {
 if (program.swept) {
     console.log(' checking funded wallets for sweep');
 
-    wallet.listWallets({filtered: false}, function(err, res) {
+    wallet.listWallets('wallets', {filtered: false}, function(err, res) {
         var wallets = res;
 
         for (i=0; i<res.length; i++) {
 
             // console.log(res[i].address);
             transaction.sweptAddrQueue.push(res[i]);
+
+        }
+
+        console.log("...done!");
+    })
+}
+
+if (program.spent) {
+    console.log(' checking swept wallets for spend');
+
+    wallet.listWallets('swept', {filtered: false}, function(err, res) {
+        var wallets = res;
+
+        for (i=0; i<res.length; i++) {
+
+            // console.log(res[i].address);
+            transaction.spentAddrQueue.push(res[i]);
 
         }
 
