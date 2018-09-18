@@ -34,7 +34,7 @@ if (program.create) {
 if (program.list) {
     console.log(' listing all wallets');
 
-    wallet.listWallets({filtered: false}, function(err, res) {
+    wallet.listWallets('wallets', {filtered: false}, function(err, res) {
         var wallets = res;
 
         console.log(wallets);
