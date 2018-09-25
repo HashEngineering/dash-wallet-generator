@@ -27,6 +27,9 @@ if (program.create) {
         database.add('wallets', wallets, function(err, res) {
             console.log(res);
             console.log("...done!");
+
+            process.exit();
+
         });
     })
 }
