@@ -65,15 +65,31 @@ if (program.fund) {
 
                 // Broadcast Funding TX
                 blockExplorer.broadcastTx({rawtx: tx.toString()}, function(err, res) {
-                    console.log(res);
-                });
 
-                // update wallet addresses w/ txid and amount
-                for (var i = 0; i < addresses.length; i++) {
-                    database.edit('wallets', {address: addresses[i]}, {txid: tx.id, amount: amount}, function(err, res) {
-                        console.log(res);
-                    });
-                }
+                    console.log(res);
+
+                    if (res.txid) {
+
+                        // update wallet addresses w/ txid and amount
+                        database.edit('wallets', addresses, {txid: tx.id, amount: amount}, function(err, res) {
+
+                            console.log(res);
+
+                            console.log("...done!");
+
+                            process.exit();
+
+                        });
+
+                    } else {
+
+                        console.log("...not done! wait a minute...");
+
+                        process.exit();
+
+                    }
+
+                });
 
             });
 
