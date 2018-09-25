@@ -41,7 +41,10 @@ if (program.list) {
         var wallets = res;
 
         console.log(wallets);
+
         console.log("...done!");
+
+        process.exit();
     })
 }
 
