@@ -12,6 +12,7 @@ program
     .option('-c, --create <n>', 'create supplied number of empty wallets', parseInt)
     .option('-l, --list', 'display all created wallets')
     .option('-f, --fund <n>', 'fund created wallets with supplied funding level', parseInt)
+    .option('-i, --initial', 'identify wallets that have been funded')
     .option('-w, --swept', 'identify wallets that have been swept')
     .option('-p, --spent', 'identify wallets that have been spent')
     .option('-r, --reclaim', 'reclaim funds from paper wallet back to funding wallet')
@@ -95,6 +96,24 @@ if (program.fund) {
 
         }
 
+    })
+}
+
+
+if (program.initial) {
+    console.log(' checking funded wallets for initial tx');
+
+    wallet.listWallets('wallets', {filtered: true}, function(err, res) {
+        var wallets = res;
+
+        for (i=0; i<res.length; i++) {
+
+            // console.log(res[i].address);
+            transaction.fundedAddrQueue.push(res[i]);
+
+        }
+
+        console.log("...done!");
     })
 }
 
