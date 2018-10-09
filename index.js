@@ -2,6 +2,7 @@
 
 var wallet = require('./lib/wallet.js');
 var transaction = require('./lib/transaction.js');
+var config = require('./lib/config.js').config;
 var blockExplorer = require('./lib/blockExplorer.js');
 var database = require('./lib/database.js');
 
@@ -15,6 +16,7 @@ program
     .option('-i, --initial', 'identify wallets that have been funded')
     .option('-w, --swept', 'identify wallets that have been swept')
     .option('-p, --spent', 'identify wallets that have been spent')
+    .option('-u, --utxo', 'identify utxo for funded wallets')
     .option('-r, --reclaim', 'reclaim funds from paper wallet back to funding wallet')
     .parse(process.argv);
 
@@ -26,7 +28,7 @@ if (program.create) {
         var wallets = res;
 
         database.add('wallets', wallets, function(err, res) {
-            console.log(res);
+
             console.log("...done!");
 
             process.exit();
@@ -47,6 +49,48 @@ if (program.list) {
 
         process.exit();
     })
+}
+
+if (program.utxo) {
+
+    wallet.listWallets('wallets', {filtered: false}, function(err, res) {
+        var wallets = res;
+
+        if (wallets.length > 0) {
+
+            for (i=0; i<res.length; i++) {
+
+                transaction.scanUtxoQueue.push(res[i]);
+
+            }
+
+            console.log("...done!");
+
+        }
+
+    });
+
+}
+
+if (program.reclaim) {
+
+    wallet.listWallets('wallets', {filtered: false}, function(err, res) {
+        var wallets = res;
+
+            if (wallets.length > 0) {
+
+                transaction.createReclaimTx(wallets, config.wallet.address, function (err, res) {
+
+                    console.log(res);
+
+
+
+                });
+
+            }
+
+    });
+
 }
 
 if (program.fund) {
