@@ -1,21 +1,18 @@
 {
   "name": "dash-wallet-generator",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Dash paper wallet generation tool",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snogcel/dash-wallet-generator.git"
+    "url": "git+https://github.com/HashEngineering/dash-wallet-generator.git"
   },
-  "author": "Jon Kindel",
+  "author": "Dash Core Group",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/snogcel/dash-wallet-generator/issues"
+    "url": "https://github.com/HashEngineering/dash-wallet-generator/issues"
   },
-  "homepage": "https://github.com/snogcel/dash-wallet-generator#readme",
+  "homepage": "https://github.com/HashEngineering/dash-wallet-generator#readme",
   "dependencies": {
     "async": "^2.6.0",
     "await": "^0.2.6",
