@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/HashEngineering/dash-wallet-generator#readme",
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "await": "^0.2.6",
     "bitcore-lib-dash": "^0.15.2",
     "chai": "^4.2.0",
